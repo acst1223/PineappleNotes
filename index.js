@@ -6,6 +6,8 @@ dotenv.config();
 const passport = require("passport");
 const cors = require("cors");
 
+const authRoute = require("./routes/auth-route")
+
 const port = process.env.PORT || 8080;
 
 // connect to DB
@@ -25,6 +27,9 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+// api routes
+app.use("/api/auth", authRoute);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}.`);
