@@ -5,8 +5,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 const passport = require("passport");
 const cors = require("cors");
+const StatusCodes = require("http-status-codes").StatusCodes;
 
 const authRoute = require("./routes/auth.route")
+const constants = require("./constants/constants");
 const port = require("./configs").port;
 
 // connect to DB
@@ -29,6 +31,11 @@ app.use(cors());
 
 // api routes
 app.use("/api/auth", authRoute);
+
+// default error handler
+app.use((err, req, res, next) => {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(constants.INTERNAL_SERVER_ERROR);
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}.`);

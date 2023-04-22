@@ -12,8 +12,10 @@ module.exports = Object.freeze({
 
     BCRYPT_N_ROUNDS: 10,
 
+    INTERNAL_SERVER_ERROR: "Internal server error.",
     USERNAME_REGISTERED_ERROR: "Username has already been registered.",
     EMAIL_REGISTERED_ERROR: "Email has already been registered.",
     CONFIRMATION_CODE_ERROR: "Username or confirmation code error.",
-    CONFIRMATION_CODE_SUCCESS: "Your account has been confirmed."
+    CONFIRMATION_CODE_SUCCESS: "Your account has been confirmed.",
+    LOGIN_USER_ERROR: "Wrong username or password."
 })

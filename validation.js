@@ -8,4 +8,10 @@ const registerSchema = Joi.object({
     password: Joi.string().required().min(constants.PASSWORD_PLAIN_MIN_LEN).max(constants.PASSWORD_PLAIN_MAX_LEN),
 })
 
+const loginSchema = Joi.object({
+    username: Joi.string().required().min(constants.USERNAME_MIN_LEN).max(constants.USERNAME_MAX_LEN),
+    password: Joi.string().required().min(constants.PASSWORD_PLAIN_MIN_LEN).max(constants.PASSWORD_PLAIN_MAX_LEN),
+})
+
 module.exports.registerSchema = registerSchema;
+module.exports.loginSchema = loginSchema;

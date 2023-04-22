@@ -5,8 +5,8 @@ function encryptPasswordSync(plainPassword) {
     return bcrypt.hashSync(plainPassword, constants.BCRYPT_N_ROUNDS);
 }
 
-function comparePassword(password, cb) {
-    bcrypt.compare(password, this.password, (err, isMatch) => {
+function comparePassword(plainPassword, cipherPassword, cb) {
+    bcrypt.compare(plainPassword, cipherPassword, (err, isMatch) => {
         if (err) {
             return cb(err, isMatch);
         }

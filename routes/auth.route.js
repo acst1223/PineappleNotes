@@ -14,15 +14,22 @@ const generateConfirmationCode = jwtManager.generateConfirmationCode;
 
 const sendConfirmationMail = require("../managers/mail.manager").sendConfirmationMail;
 
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
     // check the validation of data
     const { error } = validation.registerSchema.validate(req.body);
     if (error) return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
 
     // check if the user exists
-    const userExists = await User.findOne({$or: [
-            { username: req.body.username }, { email: req.body.email }
-        ]});
+    let userExists;
+    try {
+        userExists = await User.findOne({
+            $or: [
+                {username: req.body.username}, {email: req.body.email}
+            ]
+        });
+    } catch (err) {
+        return next(err);
+    }
     if (userExists) {
         if (userExists.username === req.body.username)
             return res.status(StatusCodes.BAD_REQUEST).send(constants.USERNAME_REGISTERED_ERROR);
@@ -49,13 +56,18 @@ router.post("/register", async (req, res) => {
             .then((messageId) => { console.log(`Successfully sent confirmation mail, message ID: ${messageId}`); })
             .catch(console.log);
     } catch (err) {
-        res.status(StatusCodes.BAD_REQUEST).send(err);
+        return next(err);
     }
 });
 
-router.get("/confirm", async (req, res) => {
+router.get("/confirm", async (req, res, next) => {
     const { username, confirmationCode } = req.query;
-    const user = await User.findOne({ username, confirmationCode });
+    let user;
+    try {
+        user = await User.findOne({username, confirmationCode});
+    } catch (err) {
+        return next(err);
+    }
 
     if (!user) return res.status(StatusCodes.NOT_FOUND).send(constants.CONFIRMATION_CODE_ERROR);
     user.status = constants.STATUS_ACTIVE;
@@ -63,8 +75,22 @@ router.get("/confirm", async (req, res) => {
         await user.save();
         res.status(StatusCodes.OK).send(constants.CONFIRMATION_CODE_SUCCESS);
     } catch (err) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(constants.CONFIRMATION_CODE_ERROR);
+        return next(err);
     }
+});
+
+router.post("/login", async (req, res, next) => {
+    const { error } = validation.loginSchema.validate(req.body);
+    if (error) return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
+
+    let user;
+    try {
+        user = await User.findOne({username: req.body.username});
+    } catch (err) {
+        return next(err);
+    }
+    if (!user) return res.status(StatusCodes.BAD_REQUEST).send(constants.LOGIN_USER_ERROR);
+    // TODO: ...
 });
 
 module.exports = router;
