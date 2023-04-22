@@ -5,6 +5,7 @@ const {STATUS_PENDING, STATUS_ACTIVE} = require("../constants/constants");
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
+        unique: true,
         required: true,
         minLength: constants.USERNAME_MIN_LEN,
         maxLength: constants.USERNAME_MAX_LEN,
@@ -28,7 +29,8 @@ const userSchema = new mongoose.Schema({
         default: STATUS_PENDING
     },
     confirmationCode: {
-        type: String
+        type: String,
+        required: true,
     },
     date: {
         type: Date,

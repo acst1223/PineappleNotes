@@ -12,5 +12,8 @@ module.exports = Object.freeze({
 
     BCRYPT_N_ROUNDS: 10,
 
-    EMAIL_REGISTERED_ERROR: "Email has already been registered."
+    USERNAME_REGISTERED_ERROR: "Username has already been registered.",
+    EMAIL_REGISTERED_ERROR: "Email has already been registered.",
+    CONFIRMATION_CODE_ERROR: "Username or confirmation code error.",
+    CONFIRMATION_CODE_SUCCESS: "Your account has been confirmed."
 })

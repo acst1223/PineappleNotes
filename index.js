@@ -6,9 +6,8 @@ dotenv.config();
 const passport = require("passport");
 const cors = require("cors");
 
-const authRoute = require("./routes/auth-route")
-
-const port = process.env.PORT || 8080;
+const authRoute = require("./routes/auth.route")
+const port = require("./configs").port;
 
 // connect to DB
 mongoose
