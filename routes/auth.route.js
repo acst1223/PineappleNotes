@@ -11,6 +11,7 @@ const comparePassword = bcryptManager.comparePassword;
 
 const jwtManager = require("../managers/jwt.manager");
 const generateConfirmationCode = jwtManager.generateConfirmationCode;
+const generatePassportToken = jwtManager.generatePassportToken;
 
 const sendConfirmationMail = require("../managers/mail.manager").sendConfirmationMail;
 
@@ -83,14 +84,29 @@ router.post("/login", async (req, res, next) => {
     const { error } = validation.loginSchema.validate(req.body);
     if (error) return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
 
+    // check whether user exists
     let user;
     try {
         user = await User.findOne({username: req.body.username});
     } catch (err) {
         return next(err);
     }
-    if (!user) return res.status(StatusCodes.BAD_REQUEST).send(constants.LOGIN_USER_ERROR);
-    // TODO: ...
+    if (!user) return res.status(StatusCodes.UNAUTHORIZED).send(constants.LOGIN_USER_ERROR);
+
+    // check email confirmation status
+    if (user.status !== constants.STATUS_ACTIVE)
+        return res.status(StatusCodes.UNAUTHORIZED).send(constants.LOGIN_EMAIL_CONFIRMATION_ERROR);
+
+    // compare password
+    comparePassword(req.body.password, user.password, (err, isMatch) => {
+        if (err) return next(err);
+        if (!isMatch) return res.status(StatusCodes.UNAUTHORIZED).send(constants.LOGIN_USER_ERROR);
+
+        // password matched
+        const tokenObject = { _id: user._id, username: user.username, email: user.email };
+        const token = generatePassportToken(user);
+        res.status(StatusCodes.OK).send({ token });
+    });
 });
 
 module.exports = router;

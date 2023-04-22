@@ -35,6 +35,7 @@ app.use("/api/auth", authRoute);
 // default error handler
 app.use((err, req, res, next) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(constants.INTERNAL_SERVER_ERROR);
+    console.log(err);
 });
 
 app.listen(port, () => {

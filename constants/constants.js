@@ -17,5 +17,6 @@ module.exports = Object.freeze({
     EMAIL_REGISTERED_ERROR: "Email has already been registered.",
     CONFIRMATION_CODE_ERROR: "Username or confirmation code error.",
     CONFIRMATION_CODE_SUCCESS: "Your account has been confirmed.",
-    LOGIN_USER_ERROR: "Wrong username or password."
+    LOGIN_USER_ERROR: "Wrong username or password.",
+    LOGIN_EMAIL_CONFIRMATION_ERROR: "Email address is not confirmed, please confirm through your confirmation email first."
 })
