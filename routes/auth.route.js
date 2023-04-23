@@ -27,7 +27,7 @@ router.post("/register", async (req, res, next) => {
             $or: [
                 {username: req.body.username}, {email: req.body.email}
             ]
-        });
+        }).exec();
     } catch (err) {
         return next(err);
     }
@@ -65,7 +65,7 @@ router.get("/confirm", async (req, res, next) => {
     const { username, confirmationCode } = req.query;
     let user;
     try {
-        user = await User.findOne({username, confirmationCode});
+        user = await User.findOne({username, confirmationCode}).exec();
     } catch (err) {
         return next(err);
     }
@@ -87,7 +87,7 @@ router.post("/login", async (req, res, next) => {
     // check whether user exists
     let user;
     try {
-        user = await User.findOne({username: req.body.username});
+        user = await User.findOne({username: req.body.username}).exec();
     } catch (err) {
         return next(err);
     }

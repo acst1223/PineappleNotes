@@ -21,5 +21,7 @@ module.exports = Object.freeze({
     CONFIRMATION_CODE_SUCCESS: "Your account has been confirmed.",
     LOGIN_USER_ERROR: "Wrong username or password.",
     LOGIN_EMAIL_CONFIRMATION_ERROR: "Email address is not confirmed, please confirm through your confirmation email first.",
-    NOTE_NOT_FOUND_ERROR: "Note not found."
+    NOTE_NOT_FOUND_ERROR: "Note not found.",
+    NOTE_NO_PERMISSION_ERROR: "No permission to access this note.",
+    DELETE_NOTE_SUCCESS: "Note has been deleted.",
 })

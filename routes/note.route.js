@@ -29,8 +29,12 @@ router.post("/create", async (req, res, next) => {
 router.get("/:_id", async (req, res, next) => {
     const { _id } = req.params;
     try {
-        const note = await Note.findById(_id).populate("author", "username");
+        const note = await Note.findById(_id).populate("author", "username").exec();
         if (!note) return res.status(StatusCodes.NOT_FOUND).send(constants.NOTE_NOT_FOUND_ERROR);
+
+        // check if the user is the author of the note
+        if (!note.author._id.equals(req.user._id))
+            return res.status(StatusCodes.FORBIDDEN).send(constants.NOTE_NO_PERMISSION_ERROR);
         res.status(StatusCodes.OK).send(note);
     } catch (err) {
         return next(err);
@@ -41,9 +45,14 @@ router.get("/:_id", async (req, res, next) => {
 router.delete("/:_id", async (req, res, next) => {
     const { _id } = req.params;
     try {
-        const deletedNote = await Note.findByIdAndDelete(_id);
-        if (!deletedNote) return res.status(StatusCodes.NOT_FOUND).send(constants.NOTE_NOT_FOUND_ERROR);
-        res.status(StatusCodes.OK).send(deletedNote);
+        const note = await Note.findById(_id).exec();
+        if (!note) return res.status(StatusCodes.NOT_FOUND).send(constants.NOTE_NOT_FOUND_ERROR);
+
+        // check if the user is the author of the note
+        if (!note.author._id.equals(req.user._id))
+            return res.status(StatusCodes.FORBIDDEN).send(constants.NOTE_NO_PERMISSION_ERROR);
+        await Note.deleteOne({_id: _id}).exec();
+        res.status(StatusCodes.OK).send(constants.DELETE_NOTE_SUCCESS);
     } catch (err) {
         return next(err);
     }
