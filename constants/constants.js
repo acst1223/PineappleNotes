@@ -9,6 +9,8 @@ module.exports = Object.freeze({
     PASSWORD_CIPHER_MAX_LEN: 60,
     STATUS_PENDING: 'Pending',
     STATUS_ACTIVE: 'Active',
+    TITLE_MIN_LEN: 1,
+    TITLE_MAX_LEN: 255,
 
     BCRYPT_N_ROUNDS: 10,
 

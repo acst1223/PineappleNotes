@@ -4,10 +4,13 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 const passport = require("passport");
+require("./managers/passport.manager")(passport);
 const cors = require("cors");
 const StatusCodes = require("http-status-codes").StatusCodes;
 
-const authRoute = require("./routes/auth.route")
+const authRoute = require("./routes/auth.route");
+const noteRoute = require("./routes/note.route");
+
 const constants = require("./constants/constants");
 const port = require("./configs").port;
 
@@ -31,6 +34,7 @@ app.use(cors());
 
 // api routes
 app.use("/api/auth", authRoute);
+app.use("/api/notes", passport.authenticate("jwt", { session: false }), noteRoute);
 
 // default error handler
 app.use((err, req, res, next) => {

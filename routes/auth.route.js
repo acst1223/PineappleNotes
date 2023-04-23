@@ -103,8 +103,7 @@ router.post("/login", async (req, res, next) => {
         if (!isMatch) return res.status(StatusCodes.UNAUTHORIZED).send(constants.LOGIN_USER_ERROR);
 
         // password matched
-        const tokenObject = { _id: user._id, username: user.username, email: user.email };
-        const token = generatePassportToken(user);
+        const token = "Bearer " + generatePassportToken(user);
         res.status(StatusCodes.OK).send({ token });
     });
 });
