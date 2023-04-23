@@ -34,7 +34,7 @@ app.use(cors());
 
 // api routes
 app.use("/api/auth", authRoute);
-app.use("/api/notes", passport.authenticate("jwt", { session: false }), noteRoute);
+app.use("/api/note", passport.authenticate("jwt", { session: false }), noteRoute);
 
 // default error handler
 app.use((err, req, res, next) => {
