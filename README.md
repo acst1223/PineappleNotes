@@ -1,1 +1,1 @@
-# Pineapple Notes
+# Pineapple Notes Backend
