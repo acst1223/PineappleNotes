@@ -14,6 +14,9 @@ module.exports = Object.freeze({
 
     BCRYPT_N_ROUNDS: 10,
 
+    DEFAULT_PAGE_SIZE: 15,
+    DEFAULT_PAGE_NUMBER: 1,
+
     INTERNAL_SERVER_ERROR: "Internal server error.",
     USERNAME_REGISTERED_ERROR: "Username has already been registered.",
     EMAIL_REGISTERED_ERROR: "Email has already been registered.",

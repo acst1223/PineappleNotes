@@ -26,7 +26,7 @@ router.post("/create", async (req, res, next) => {
 });
 
 // get note by id
-router.get("/:_id", async (req, res, next) => {
+router.get("/note/:_id", async (req, res, next) => {
     const { _id } = req.params;
     try {
         const note = await Note.findById(_id).populate("author", "username").exec();
@@ -42,7 +42,7 @@ router.get("/:_id", async (req, res, next) => {
 });
 
 // delete note by id
-router.delete("/:_id", async (req, res, next) => {
+router.delete("/note/:_id", async (req, res, next) => {
     const { _id } = req.params;
     try {
         const note = await Note.findById(_id).exec();
@@ -53,6 +53,19 @@ router.delete("/:_id", async (req, res, next) => {
             return res.status(StatusCodes.FORBIDDEN).send(constants.NOTE_NO_PERMISSION_ERROR);
         await Note.deleteOne({_id: _id}).exec();
         res.status(StatusCodes.OK).send(constants.DELETE_NOTE_SUCCESS);
+    } catch (err) {
+        return next(err);
+    }
+});
+
+// get a note list of current user
+router.get("/list", async (req, res, next) => {
+    const { _id } = req.user._id;
+    console.log(_id);
+    const { page = constants.DEFAULT_PAGE_NUMBER, limit = constants.DEFAULT_PAGE_SIZE } = req.query;
+    try {
+        const notes = await Note.find({author: _id}).sort("-date").skip((page - 1) * limit).limit(limit).exec();
+        res.status(StatusCodes.OK).send(notes);
     } catch (err) {
         return next(err);
     }
